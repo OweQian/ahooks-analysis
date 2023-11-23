@@ -1,11 +1,16 @@
-import useUnmount from "@/hooks/useUnmount";
-import React from 'react';
+import React, {useEffect} from 'react';
 import useBoolean from "@/hooks/useBoolean";
+import useUnmountedRef from "@/hooks/useUnmountedRef";
 
 const MyComponent = () => {
-  useUnmount(() => {
-    alert('unmount');
-  });
+  const unmountedRef = useUnmountedRef();
+  useEffect(() => {
+    setTimeout(() => {
+      if (!unmountedRef.current) {
+        alert('component is alive');
+      }
+    }, 3000);
+  }, []);
 
   return <p>Hello World!</p>;
 };
