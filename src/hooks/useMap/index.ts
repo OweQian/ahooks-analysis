@@ -14,12 +14,12 @@ const useMap = <K, V>(initialValue?: Iterable<readonly [K, V]>) => {
       temp.set(key, value);
       return temp;
     })
-  })
+  });
 
   // 生成一个新的 Map 对象
   const setAll = useMemoizedFn((newMap: Iterable<readonly [K, V]>) => {
     setMap(new Map(newMap));
-  })
+  });
 
   // 获取
   const get = useMemoizedFn((key: K) => map.get(key));
@@ -31,12 +31,12 @@ const useMap = <K, V>(initialValue?: Iterable<readonly [K, V]>) => {
       temp.delete(key);
       return temp;
     })
-  })
+  });
 
   // 重置
   const reset = useMemoizedFn(() => {
     setMap(getInitValue())
-  })
+  });
 
   return [
     map,
@@ -47,7 +47,7 @@ const useMap = <K, V>(initialValue?: Iterable<readonly [K, V]>) => {
       remove,
       reset
     }
-  ]
+  ];
 }
 
 export default useMap;

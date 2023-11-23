@@ -1,5 +1,5 @@
 import useToggle from '../useToggle';
-import { useMemo } from 'react';
+import {useMemo} from 'react';
 
 export interface Actions {
   toggle: () => void;

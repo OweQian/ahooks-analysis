@@ -1,5 +1,5 @@
 import useMemoizedFn from '../hooks/useMemoizedFn';
-import React, { useCallback, useRef, useState } from 'react';
+import React, {useCallback, useRef, useState} from 'react';
 
 export default function HomePage() {
   const [count, setCount] = useState(0);
@@ -26,22 +26,22 @@ export default function HomePage() {
 
       <p>You can click the button to see the number of sub-component renderings</p>
 
-      <div style={{ marginTop: 32 }}>
+      <div style={{marginTop: 32}}>
         <h3>Component with useCallback function:</h3>
         {/* use callback function, ExpensiveTree component will re-render on state change */}
-        <ExpensiveTree showCount={callbackFn} />
+        <ExpensiveTree showCount={callbackFn}/>
       </div>
 
-      <div style={{ marginTop: 32 }}>
+      <div style={{marginTop: 32}}>
         <h3>Component with useMemoizedFn function:</h3>
         {/* use memoized function, ExpensiveTree component will only render once */}
-        <ExpensiveTree showCount={memoizedFn} />
+        <ExpensiveTree showCount={memoizedFn}/>
       </div>
     </>
   );
 }
 
-const ExpensiveTree = React.memo<{ [key: string]: any }>(({ showCount }) => {
+const ExpensiveTree = React.memo<{ [key: string]: any }>(({showCount}) => {
   const renderCountRef = useRef(0);
   renderCountRef.current += 1;
 
