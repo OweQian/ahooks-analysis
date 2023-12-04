@@ -1,29 +1,31 @@
-import React, {useEffect} from 'react';
-import useBoolean from "@/hooks/useBoolean";
-import useUnmountedRef from "@/hooks/useUnmountedRef";
-
-const MyComponent = () => {
-  const unmountedRef = useUnmountedRef();
-  useEffect(() => {
-    setTimeout(() => {
-      if (!unmountedRef.current) {
-        alert('component is alive');
-      }
-    }, 3000);
-  }, []);
-
-  return <p>Hello World!</p>;
-};
+import React, {useState, useEffect} from 'react';
+import useUpdateEffect from "@/hooks/useUpdateEffect";
 
 export default function HomePage() {
-  const [state, { toggle }] = useBoolean(true);
+  const [count, setCount] = useState(0);
+  const [effectCount, setEffectCount] = useState(0);
+  const [updateEffectCount, setUpdateEffectCount] = useState(0);
+
+  useEffect(() => {
+    setEffectCount((c) => c + 1);
+  }, [count]);
+
+  useUpdateEffect(() => {
+    setUpdateEffectCount((c) => c + 1);
+    return () => {
+      // do something
+    };
+  }, [count]); // you can include deps array if necessary
 
   return (
-    <>
-      <button type="button" onClick={toggle}>
-        {state ? 'unmount' : 'mount'}
-      </button>
-      {state && <MyComponent />}
-    </>
+    <div>
+      <p>effectCount: {effectCount}</p>
+      <p>updateEffectCount: {updateEffectCount}</p>
+      <p>
+        <button type="button" onClick={() => setCount((c) => c + 1)}>
+          reRender
+        </button>
+      </p>
+    </div>
   );
 }

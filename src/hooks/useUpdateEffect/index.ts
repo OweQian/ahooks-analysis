@@ -1,4 +1,4 @@
-const useUpdateEffect = () => {
-};
+import {useEffect} from 'react';
+import {createUpdateEffect} from '@/hooks/createUpdateEffect';
 
-export default useUpdateEffect;
+export default createUpdateEffect(useEffect);
