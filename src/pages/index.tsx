@@ -1,31 +1,20 @@
-import React, {useState, useEffect} from 'react';
-import useUpdateEffect from "@/hooks/useUpdateEffect";
+import React, {useState} from 'react';
+import usePrevious from '@/hooks/usePrevious';
 
 export default function HomePage() {
   const [count, setCount] = useState(0);
-  const [effectCount, setEffectCount] = useState(0);
-  const [updateEffectCount, setUpdateEffectCount] = useState(0);
-
-  useEffect(() => {
-    setEffectCount((c) => c + 1);
-  }, [count]);
-
-  useUpdateEffect(() => {
-    setUpdateEffectCount((c) => c + 1);
-    return () => {
-      // do something
-    };
-  }, [count]); // you can include deps array if necessary
+  const previous = usePrevious(count);
 
   return (
-    <div>
-      <p>effectCount: {effectCount}</p>
-      <p>updateEffectCount: {updateEffectCount}</p>
-      <p>
-        <button type="button" onClick={() => setCount((c) => c + 1)}>
-          reRender
-        </button>
-      </p>
-    </div>
+    <>
+      <div>counter current value: {count}</div>
+      <div style={{ marginBottom: 8 }}>counter previous value: {previous}</div>
+      <button type="button" onClick={() => setCount((c) => c + 1)}>
+        increase
+      </button>
+      <button type="button" style={{ marginLeft: 8 }} onClick={() => setCount((c) => c - 1)}>
+        decrease
+      </button>
+    </>
   );
 }
