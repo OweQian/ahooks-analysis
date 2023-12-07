@@ -1,20 +1,12 @@
-import React, {useState} from 'react';
-import usePrevious from '@/hooks/usePrevious';
+import React, {useState, useRef} from 'react';
+import useEventListener from "@/hooks/useEventListener";
 
 export default function HomePage() {
-  const [count, setCount] = useState(0);
-  const previous = usePrevious(count);
+  const [value, setValue] = useState('');
 
-  return (
-    <>
-      <div>counter current value: {count}</div>
-      <div style={{ marginBottom: 8 }}>counter previous value: {previous}</div>
-      <button type="button" onClick={() => setCount((c) => c + 1)}>
-        increase
-      </button>
-      <button type="button" style={{ marginLeft: 8 }} onClick={() => setCount((c) => c - 1)}>
-        decrease
-      </button>
-    </>
-  );
+  useEventListener('keydown', (ev) => {
+    setValue(ev.code);
+  });
+
+  return <p>Your press key is {value}</p>;
 }
