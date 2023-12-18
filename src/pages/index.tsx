@@ -1,58 +1,28 @@
-import useMemoizedFn from "@/hooks/useMemoizedFn";
-import React, {useCallback, useMemo, useRef, useState} from 'react';
-import useLatest from "@/hooks/useLatest";
+import React, {useRef, useState} from 'react';
+import useMutationObserver from '@/hooks/useMutationObserver';
 
 export default function HomePage() {
+  const [width, setWidth] = useState(200);
   const [count, setCount] = useState(0);
 
-  // const memoizedFn = useMemoizedFn(() => {
-  //   alert(`Current count is ${count}`);
-  // });
+  const ref = useRef<HTMLDivElement>(null);
 
-  const memoizedFn = () => {
-    alert(`Current count is ${count}`);
-  };
-
-  return (
-    <>
-      <p>count: {count}</p>
-      <button
-        type="button"
-        onClick={() => {
-          setCount((c) => c + 1);
-        }}
-      >
-        Add Count
-      </button>
-
-      <p>You can click the button to see the number of sub-component renderings</p>
-
-      <div style={{ marginTop: 32 }}>
-        <h3>Component with useMemoizedFn function:</h3>
-        {/* use memoized function, ExpensiveTree component will only render once */}
-        <ExpensiveTree showCount={memoizedFn} />
-      </div>
-    </>
+  useMutationObserver(
+    (mutationsList) => {
+      console.log(mutationsList);
+      mutationsList.forEach(() => setCount((c) => c + 1));
+    },
+    ref,
+    { attributes: true },
   );
-};
 
-// some expensive component with React.memo
-const ExpensiveTree = React.memo<{ [key: string]: any }>(({ showCount }) => {
-  const renderCountRef = useRef(0);
-  renderCountRef.current += 1;
-  const showCountRef = useLatest(showCount);
-  const buttonProps = useMemo(() => {
-    return {
-      type: 'button',
-      onClick: showCountRef.current
-    }
-  }, [showCount])
   return (
     <div>
-      <p>Render Count: {renderCountRef.current}</p>
-      <button {...buttonProps}>
-        showParentCount
-      </button>
+      <div ref={ref} style={{ width, padding: 12, border: '1px solid #000', marginBottom: 8 }}>
+        current width：{width}
+      </div>
+      <button onClick={() => setWidth((w) => w + 10)}>widening</button>
+      <p>Mutation count {count}</p>
     </div>
   );
-});
+};
