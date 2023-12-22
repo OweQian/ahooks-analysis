@@ -1,28 +1,23 @@
-import React, {useRef, useState} from 'react';
-import useMutationObserver from '@/hooks/useMutationObserver';
+import React, { useRef, useState } from 'react';
+import useLongPress from "@/hooks/useLongPress";
 
 export default function HomePage() {
-  const [width, setWidth] = useState(200);
-  const [count, setCount] = useState(0);
+  const [pressCounter, setPressCounter] = useState(0);
+  const [clickCounter, setClickCounter] = useState(0);
 
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLButtonElement>(null);
 
-  useMutationObserver(
-    (mutationsList) => {
-      console.log(mutationsList);
-      mutationsList.forEach(() => setCount((c) => c + 1));
-    },
-    ref,
-    { attributes: true },
-  );
+  useLongPress(() => setPressCounter((s) => s + 1), ref, {
+    onClick: () => setClickCounter((s) => s + 1),
+  });
 
   return (
     <div>
-      <div ref={ref} style={{ width, padding: 12, border: '1px solid #000', marginBottom: 8 }}>
-        current width：{width}
-      </div>
-      <button onClick={() => setWidth((w) => w + 10)}>widening</button>
-      <p>Mutation count {count}</p>
+      <button ref={ref} type="button">
+        Press me
+      </button>
+      <p>pressCounter: {pressCounter}</p>
+      <p>clickCounter: {clickCounter}</p>
     </div>
   );
 };
