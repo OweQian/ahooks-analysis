@@ -9,6 +9,9 @@
     "start": "npm run dev"
   },
   "dependencies": {
+    "intersection-observer": "^0.12.2",
+    "lodash": "^4.17.21",
+    "screenfull": "^6.0.2",
     "umi": "^4.0.88"
   },
   "devDependencies": {
