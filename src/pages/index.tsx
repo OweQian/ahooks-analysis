@@ -1,23 +1,85 @@
-import React, { useRef, useState } from 'react';
-import useLongPress from "@/hooks/useLongPress";
+import React, { useState } from 'react';
+import useHistoryTravel from "@/hooks/useHistoryTravel";
 
 export default function HomePage() {
-  const [pressCounter, setPressCounter] = useState(0);
-  const [clickCounter, setClickCounter] = useState(0);
+  const {
+    value = [],
+    setValue,
+    backLength,
+    forwardLength,
+    back,
+    forward,
+    go,
+    reset,
+  } = useHistoryTravel(['do homework']);
 
-  const ref = useRef<HTMLButtonElement>(null);
+  const [inputValue, setInputValue] = useState('');
+  const [step, setStep] = useState(-1);
 
-  useLongPress(() => setPressCounter((s) => s + 1), ref, {
-    onClick: () => setClickCounter((s) => s + 1),
-  });
+  const onAdd = () => {
+    setValue([...value, inputValue]);
+    setInputValue('');
+  };
+
+  const onGo = () => {
+    go(step);
+    setStep(0);
+  };
+
+  const onReset = () => {
+    reset();
+    setStep(0);
+    setInputValue('');
+  };
 
   return (
     <div>
-      <button ref={ref} type="button">
-        Press me
-      </button>
-      <p>pressCounter: {pressCounter}</p>
-      <p>clickCounter: {clickCounter}</p>
+      <div style={{ border: '1px solid #ebedf1', padding: 16, marginBottom: 16 }}>
+        <h3>TODO List</h3>
+        <ul>
+          {value.map((it, index) => (
+            <li key={index}>{it}</li>
+          ))}
+        </ul>
+      </div>
+      <div style={{ marginBottom: 16 }}>
+        <input
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          placeholder="Please enter TODO name"
+          style={{ width: 200, marginRight: 8 }}
+        />
+        <button type="button" onClick={onAdd} style={{ marginRight: 8 }}>
+          Add TODO
+        </button>
+        <button type="button" disabled={backLength <= 0} onClick={back} style={{ marginRight: 8 }}>
+          Undo
+        </button>
+        <button
+          type="button"
+          disabled={forwardLength <= 0}
+          onClick={forward}
+          style={{ marginRight: 8 }}
+        >
+          Redo
+        </button>
+        <button type="button" disabled={!backLength && !forwardLength} onClick={onReset}>
+          Reset
+        </button>
+      </div>
+      <div>
+        <input
+          type="number"
+          value={step}
+          onChange={(e) => setStep(e.target.value as any)}
+          max={forwardLength}
+          min={backLength * -1}
+          style={{ marginRight: 8, width: 60 }}
+        />
+        <button type="button" onClick={onGo}>
+          Go
+        </button>
+      </div>
     </div>
   );
 };
