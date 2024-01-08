@@ -3,6 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@types/react': ^18.0.33
   '@types/react-dom': ^18.0.11
+  dayjs: ^1.11.10
   intersection-observer: ^0.12.2
   lodash: ^4.17.21
   screenfull: ^6.0.2
@@ -10,6 +11,7 @@ specifiers:
   umi: ^4.0.88
 
 dependencies:
+  dayjs: registry.npmjs.org/dayjs/1.11.10
   intersection-observer: registry.npmjs.org/intersection-observer/0.12.2
   lodash: registry.npmjs.org/lodash/4.17.21
   screenfull: registry.npmjs.org/screenfull/6.0.2
@@ -3476,6 +3478,12 @@ packages:
     name: data-uri-to-buffer
     version: 4.0.1
     engines: {node: '>= 12'}
+    dev: false
+
+  registry.npmjs.org/dayjs/1.11.10:
+    resolution: {integrity: sha512-vjAczensTgRcqDERK0SR2XMwsF/tSvnvlv6VcF2GIhg6Sx4yOIt/irsr1RDJsKiIyBzJDpCoXiWWq28MqH2cnQ==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/dayjs/-/dayjs-1.11.10.tgz}
+    name: dayjs
+    version: 1.11.10
     dev: false
 
   registry.npmjs.org/debug/3.2.7:

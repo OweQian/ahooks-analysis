@@ -9,6 +9,7 @@
     "start": "npm run dev"
   },
   "dependencies": {
+    "dayjs": "^1.11.10",
     "intersection-observer": "^0.12.2",
     "lodash": "^4.17.21",
     "screenfull": "^6.0.2",
