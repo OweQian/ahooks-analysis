@@ -6,6 +6,8 @@ specifiers:
   dayjs: ^1.11.10
   intersection-observer: ^0.12.2
   lodash: ^4.17.21
+  query-string: ^8.1.0
+  react-router: ^6.21.1
   resize-observer-polyfill: ^1.5.1
   screenfull: ^6.0.2
   typescript: ^5.0.3
@@ -15,12 +17,14 @@ dependencies:
   dayjs: registry.npmjs.org/dayjs/1.11.10
   intersection-observer: registry.npmjs.org/intersection-observer/0.12.2
   lodash: registry.npmjs.org/lodash/4.17.21
+  query-string: registry.npmjs.org/query-string/8.1.0
   screenfull: registry.npmjs.org/screenfull/6.0.2
   umi: registry.npmjs.org/umi/4.0.88_wicgjtfnnq5cbzs2iknymu6uzm
 
 devDependencies:
   '@types/react': registry.npmjs.org/@types/react/18.2.38
   '@types/react-dom': registry.npmjs.org/@types/react-dom/18.2.16
+  react-router: registry.npmjs.org/react-router/6.21.1
   resize-observer-polyfill: registry.npmjs.org/resize-observer-polyfill/1.5.1
   typescript: registry.npmjs.org/typescript/5.3.2
 
@@ -1462,6 +1466,13 @@ packages:
       picocolors: registry.npmjs.org/picocolors/1.0.0
       tslib: registry.npmjs.org/tslib/2.6.2
     dev: false
+
+  registry.npmjs.org/@remix-run/router/1.14.1:
+    resolution: {integrity: sha512-Qg4DMQsfPNAs88rb2xkdk03N3bjK4jgX5fR24eHCTR9q6PrhZQZ4UJBPzCHJkIpTRN1UKxx2DzjZmnC+7Lj0Ow==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@remix-run/router/-/router-1.14.1.tgz}
+    name: '@remix-run/router'
+    version: 1.14.1
+    engines: {node: '>=14.0.0'}
+    dev: true
 
   registry.npmjs.org/@sinclair/typebox/0.27.8:
     resolution: {integrity: sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@sinclair/typebox/-/typebox-0.27.8.tgz}
@@ -3523,6 +3534,13 @@ packages:
     engines: {node: '>=0.10'}
     dev: false
 
+  registry.npmjs.org/decode-uri-component/0.4.1:
+    resolution: {integrity: sha512-+8VxcR21HhTy8nOt6jf20w0c9CADrw1O8d+VZ/YzzCt4bJ3uBjw+D1q2osAB8RnpwwaeYBxy0HyKQxD5JBMuuQ==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/decode-uri-component/-/decode-uri-component-0.4.1.tgz}
+    name: decode-uri-component
+    version: 0.4.1
+    engines: {node: '>=14.16'}
+    dev: false
+
   registry.npmjs.org/deepmerge/4.3.1:
     resolution: {integrity: sha512-3sUqbMEc77XqpdNO7FRyRog+eW3ph+GYCbj+rK+uYyRMuwsVy0rMiVtPn+QJlKFvWP/1PYpapqYn0Me2knFn+A==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/deepmerge/-/deepmerge-4.3.1.tgz}
     name: deepmerge
@@ -4277,6 +4295,13 @@ packages:
     name: filter-obj
     version: 1.1.0
     engines: {node: '>=0.10.0'}
+    dev: false
+
+  registry.npmjs.org/filter-obj/5.1.0:
+    resolution: {integrity: sha512-qWeTREPoT7I0bifpPUXtxkZJ1XJzxWtfoWWkdVGqa+eCr3SHW/Ocp89o8vLvbUuQnadybJpjOKu4V+RwO6sGng==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/filter-obj/-/filter-obj-5.1.0.tgz}
+    name: filter-obj
+    version: 5.1.0
+    engines: {node: '>=14.16'}
     dev: false
 
   registry.npmjs.org/find-up/4.1.0:
@@ -6979,6 +7004,17 @@ packages:
       strict-uri-encode: registry.npmjs.org/strict-uri-encode/2.0.0
     dev: false
 
+  registry.npmjs.org/query-string/8.1.0:
+    resolution: {integrity: sha512-BFQeWxJOZxZGix7y+SByG3F36dA0AbTy9o6pSmKFcFz7DAj0re9Frkty3saBn3nHo3D0oZJ/+rx3r8H8r8Jbpw==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/query-string/-/query-string-8.1.0.tgz}
+    name: query-string
+    version: 8.1.0
+    engines: {node: '>=14.16'}
+    dependencies:
+      decode-uri-component: registry.npmjs.org/decode-uri-component/0.4.1
+      filter-obj: registry.npmjs.org/filter-obj/5.1.0
+      split-on-first: registry.npmjs.org/split-on-first/3.0.0
+    dev: false
+
   registry.npmjs.org/querystring-es3/0.2.1:
     resolution: {integrity: sha512-773xhDQnZBMFobEiztv8LIl70ch5MSF/jUQVlhwFyBILqq96anmoctVIYz+ZRp0qbCKATTn6ev02M3r7Ga5vqA==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/querystring-es3/-/querystring-es3-0.2.1.tgz}
     name: querystring-es3
@@ -7118,6 +7154,17 @@ packages:
       react-dom: registry.npmjs.org/react-dom/18.1.0_react@18.1.0
       react-router: registry.npmjs.org/react-router/6.3.0_react@18.1.0
     dev: false
+
+  registry.npmjs.org/react-router/6.21.1:
+    resolution: {integrity: sha512-W0l13YlMTm1YrpVIOpjCADJqEUpz1vm+CMo47RuFX4Ftegwm6KOYsL5G3eiE52jnJpKvzm6uB/vTKTPKM8dmkA==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/react-router/-/react-router-6.21.1.tgz}
+    name: react-router
+    version: 6.21.1
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      react: '>=16.8'
+    dependencies:
+      '@remix-run/router': registry.npmjs.org/@remix-run/router/1.14.1
+    dev: true
 
   registry.npmjs.org/react-router/6.3.0:
     resolution: {integrity: sha512-7Wh1DzVQ+tlFjkeo+ujvjSqSJmkt1+8JO+T5xklPlgrh70y7ogx75ODRW0ThWhY7S+6yEDks8TYrtQe/aoboBQ==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/react-router/-/react-router-6.3.0.tgz}
@@ -7662,6 +7709,13 @@ packages:
     name: split-on-first
     version: 1.1.0
     engines: {node: '>=6'}
+    dev: false
+
+  registry.npmjs.org/split-on-first/3.0.0:
+    resolution: {integrity: sha512-qxQJTx2ryR0Dw0ITYyekNQWpz6f8dGd7vffGNflQQ3Iqj9NJ6qiZ7ELpZsJ/QBhIVAiDfXdag3+Gp8RvWa62AA==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/split-on-first/-/split-on-first-3.0.0.tgz}
+    name: split-on-first
+    version: 3.0.0
+    engines: {node: '>=12'}
     dev: false
 
   registry.npmjs.org/split2/4.2.0:

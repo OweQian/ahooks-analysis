@@ -1,85 +1,78 @@
-import React, { useState } from 'react';
-import useHistoryTravel from "@/hooks/useHistoryTravel";
+import React, { useMemo } from 'react';
+import useUrlState from "@/hooks/useUrlState";
 
 export default function HomePage() {
-  const {
-    value = [],
-    setValue,
-    backLength,
-    forwardLength,
-    back,
-    forward,
-    go,
-    reset,
-  } = useHistoryTravel(['do homework']);
-
-  const [inputValue, setInputValue] = useState('');
-  const [step, setStep] = useState(-1);
-
-  const onAdd = () => {
-    setValue([...value, inputValue]);
-    setInputValue('');
-  };
-
-  const onGo = () => {
-    go(step);
-    setStep(0);
-  };
-
-  const onReset = () => {
-    reset();
-    setStep(0);
-    setInputValue('');
-  };
-
+  const [page, setPage] = useUrlState({ page: '1' });
+  const [pageSize, setPageSize] = useUrlState({ pageSize: '10' });
+  const a = useMemo(() => 'aa', []);
   return (
-    <div>
-      <div style={{ border: '1px solid #ebedf1', padding: 16, marginBottom: 16 }}>
-        <h3>TODO List</h3>
-        <ul>
-          {value.map((it, index) => (
-            <li key={index}>{it}</li>
-          ))}
-        </ul>
+    <>
+      <div>
+        <div>{a}</div>
+        page: {page.page}
+        <span style={{ paddingLeft: 8 }}>
+          <button
+            onClick={() => {
+              setPage((s) => ({ page: Number(s.page) + 1 }));
+            }}
+          >
+            +
+          </button>
+          <button
+            onClick={() => {
+              setPage((s) => ({ page: Number(s.page) - 1 }));
+            }}
+            style={{ margin: '0 8px' }}
+          >
+            -
+          </button>
+          <button
+            onClick={() => {
+              setPage({ page: undefined });
+            }}
+          >
+            reset
+          </button>
+        </span>
       </div>
-      <div style={{ marginBottom: 16 }}>
-        <input
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          placeholder="Please enter TODO name"
-          style={{ width: 200, marginRight: 8 }}
-        />
-        <button type="button" onClick={onAdd} style={{ marginRight: 8 }}>
-          Add TODO
-        </button>
-        <button type="button" disabled={backLength <= 0} onClick={back} style={{ marginRight: 8 }}>
-          Undo
-        </button>
-        <button
-          type="button"
-          disabled={forwardLength <= 0}
-          onClick={forward}
-          style={{ marginRight: 8 }}
-        >
-          Redo
-        </button>
-        <button type="button" disabled={!backLength && !forwardLength} onClick={onReset}>
-          Reset
-        </button>
+      <br />
+      <div>
+        pageSize: {pageSize.pageSize}
+        <span style={{ paddingLeft: 8 }}>
+          <button
+            onClick={() => {
+              setPageSize((s) => ({ pageSize: Number(s.pageSize) + 1 }));
+            }}
+          >
+            +
+          </button>
+          <button
+            onClick={() => {
+              setPageSize((s) => ({ pageSize: Number(s.pageSize) - 1 }));
+            }}
+            style={{ margin: '0 8px' }}
+          >
+            -
+          </button>
+          <button
+            onClick={() => {
+              setPageSize({ pageSize: undefined });
+            }}
+          >
+            reset
+          </button>
+        </span>
       </div>
       <div>
-        <input
-          type="number"
-          value={step}
-          onChange={(e) => setStep(e.target.value as any)}
-          max={forwardLength}
-          min={backLength * -1}
-          style={{ marginRight: 8, width: 60 }}
-        />
-        <button type="button" onClick={onGo}>
-          Go
+        <button
+          onClick={async () => {
+            await setPageSize({ pageSize: undefined });
+            await setPage({ page: undefined });
+          }}
+        >
+          reset all
         </button>
       </div>
-    </div>
+    </>
   );
 };
