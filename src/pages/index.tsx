@@ -1,78 +1,27 @@
-import React, { useMemo } from 'react';
-import useUrlState from "@/hooks/useUrlState";
+import React, { useState } from 'react';
+import useTrackedEffect from "@/hooks/useTrackedEffect";
 
 export default function HomePage() {
-  const [page, setPage] = useUrlState({ page: '1' });
-  const [pageSize, setPageSize] = useUrlState({ pageSize: '10' });
-  const a = useMemo(() => 'aa', []);
+  const [count, setCount] = useState(5);
+  const [count2, setCount2] = useState(0);
+
+  useTrackedEffect(
+    (changes) => {
+      console.log('Index of changed dependencies: ', changes);
+    },
+    [count, count2],
+  );
   return (
-    <>
+    <div>
+      <p>Please open the browser console to view the output!</p>
       <div>
-        <div>{a}</div>
-        page: {page.page}
-        <span style={{ paddingLeft: 8 }}>
-          <button
-            onClick={() => {
-              setPage((s) => ({ page: Number(s.page) + 1 }));
-            }}
-          >
-            +
-          </button>
-          <button
-            onClick={() => {
-              setPage((s) => ({ page: Number(s.page) - 1 }));
-            }}
-            style={{ margin: '0 8px' }}
-          >
-            -
-          </button>
-          <button
-            onClick={() => {
-              setPage({ page: undefined });
-            }}
-          >
-            reset
-          </button>
-        </span>
+        <p>Count: {count}</p>
+        <button onClick={() => setCount((c) => c + 1)}>count + 1</button>
       </div>
-      <br />
-      <div>
-        pageSize: {pageSize.pageSize}
-        <span style={{ paddingLeft: 8 }}>
-          <button
-            onClick={() => {
-              setPageSize((s) => ({ pageSize: Number(s.pageSize) + 1 }));
-            }}
-          >
-            +
-          </button>
-          <button
-            onClick={() => {
-              setPageSize((s) => ({ pageSize: Number(s.pageSize) - 1 }));
-            }}
-            style={{ margin: '0 8px' }}
-          >
-            -
-          </button>
-          <button
-            onClick={() => {
-              setPageSize({ pageSize: undefined });
-            }}
-          >
-            reset
-          </button>
-        </span>
+      <div style={{ marginTop: 16 }}>
+        <p>Count2: {count2}</p>
+        <button onClick={() => setCount2((c) => c + 1)}>count + 1</button>
       </div>
-      <div>
-        <button
-          onClick={async () => {
-            await setPageSize({ pageSize: undefined });
-            await setPage({ page: undefined });
-          }}
-        >
-          reset all
-        </button>
-      </div>
-    </>
+    </div>
   );
 };
