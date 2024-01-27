@@ -44,6 +44,9 @@ export interface Options<TData, TParams> {
   // TODO: 待续
   // loading delay
   loadingDelay?: number;
+
+  // ready
+  ready?: boolean;
 }
 
 export type Plugin<TData, TParams extends any[]> = {
