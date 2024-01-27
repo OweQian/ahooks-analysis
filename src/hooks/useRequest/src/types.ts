@@ -42,6 +42,8 @@ export interface Options<TData, TParams> {
   defaultParams?: TParams;
 
   // TODO: 待续
+  // loading delay
+  loadingDelay?: number;
 }
 
 export type Plugin<TData, TParams extends any[]> = {
@@ -63,3 +65,5 @@ export interface Result<TData, TParams extends any[]> {
 }
 
 export type Subscribe = () => void;
+
+export type Timeout = ReturnType<typeof setTimeout>;
