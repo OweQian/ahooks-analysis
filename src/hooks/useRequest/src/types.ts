@@ -47,6 +47,10 @@ export interface Options<TData, TParams> {
 
   // ready
   ready?: boolean;
+
+  pollingInterval?: number;
+  pollingWhenHidden?: boolean;
+  pollingErrorRetryCount?: number;
 }
 
 export type Plugin<TData, TParams extends any[]> = {
