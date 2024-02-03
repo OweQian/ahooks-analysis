@@ -74,6 +74,7 @@ export default class Fetch<TData, TParams extends any[]> {
     } = this.runPluginHandler('onBefore', params);
 
     // stop request
+    // 当 stopNow 为 true 时，请求永远不会发出
     if (stopNow) {
       return new Promise(() => {});
     }

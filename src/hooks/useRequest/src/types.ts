@@ -1,4 +1,5 @@
 import type Fetch from './Fetch';
+import type {DependencyList} from "react";
 
 export interface FetchState<TData, TParams extends any[]> {
   loading: boolean;
@@ -48,9 +49,14 @@ export interface Options<TData, TParams> {
   // ready
   ready?: boolean;
 
+  // polling
   pollingInterval?: number;
   pollingWhenHidden?: boolean;
   pollingErrorRetryCount?: number;
+
+  // refreshDeps
+  refreshDeps: DependencyList;
+  refreshDepsAction: () => void;
 }
 
 export type Plugin<TData, TParams extends any[]> = {
