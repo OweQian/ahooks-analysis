@@ -6,7 +6,7 @@ import type { DebouncedFunc, DebounceSettings } from "lodash";
 /**
  * 函数劫持，加入防抖逻辑
  * loadash debounce: 创建一个 debounced（防抖动）函数，该函数会从上一次被调用后，延迟 wait 毫秒后调用 func 方法。
- * https://www.lodashjs.com/docs/lodash.debounce#_debouncefunc-wait0-options
+ * https://www.lodashjs.com/docs/lodash.debounce
  * */
 const useDebouncePlugin: Plugin<any, any[]> = (fetchInstance, {
   debounceWait,
