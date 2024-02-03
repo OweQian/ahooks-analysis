@@ -42,21 +42,48 @@ export interface Options<TData, TParams> {
 
   defaultParams?: TParams;
 
-  // TODO: 待续
+  // refreshDeps
+  refreshDeps?: DependencyList;
+  refreshDepsAction?: () => void;
+
   // loading delay
   loadingDelay?: number;
-
-  // ready
-  ready?: boolean;
 
   // polling
   pollingInterval?: number;
   pollingWhenHidden?: boolean;
   pollingErrorRetryCount?: number;
 
-  // refreshDeps
-  refreshDeps: DependencyList;
-  refreshDepsAction: () => void;
+  // refresh on window focus
+  refreshOnWindowFocus?: boolean;
+  focusTimespan?: number;
+
+  // debounce
+  debounceWait?: number;
+  debounceLeading?: boolean;
+  debounceTrailing?: boolean;
+  debounceMaxWait?: number;
+
+  // throttle
+  throttleWait?: number;
+  throttleLeading?: boolean;
+  throttleTrailing?: boolean;
+
+  // cache
+  cacheKey?: string;
+  cacheTime?: number;
+  staleTime?: number;
+  setCache?: (data: CachedData<TData, TParams>) => void;
+  getCache?: (params: TParams) => CachedData<TData, TParams> | undefined;
+
+  // retry
+  retryCount?: number;
+  retryInterval?: number;
+
+  // ready
+  ready?: boolean;
+
+  // [key: string]: any;
 }
 
 export type Plugin<TData, TParams extends any[]> = {

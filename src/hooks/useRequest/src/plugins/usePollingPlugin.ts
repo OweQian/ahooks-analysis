@@ -9,7 +9,7 @@ const usePollingPlugin: Plugin<any, any[]> = (
   { pollingInterval, pollingWhenHidden = true, pollingErrorRetryCount = -1 },
 ) => {
   const timerRef = useRef<Timeout>();
-  // 清除订阅事件的列表
+  // 清除订阅事件的函数
   const unsubscribeRef = useRef<() => void>();
   // 执行错误次数
   const countRef = useRef<number>(0);
@@ -19,7 +19,7 @@ const usePollingPlugin: Plugin<any, any[]> = (
       clearTimeout(timerRef.current);
     }
 
-    // 执行清除订阅事件的列表
+    // 执行清除订阅事件的函数
     unsubscribeRef.current?.();
   };
 
@@ -56,7 +56,7 @@ const usePollingPlugin: Plugin<any, any[]> = (
           // pollingWhenHidden: 在页面隐藏时，是否继续轮询。如果设置为 false，在页面隐藏时会暂时停止轮询，页面重新显示时继续上次轮询
           // if pollingWhenHidden = false && document is hidden, then stop polling and subscribe revisible
           if (!pollingWhenHidden && !isDocumentVisible()) {
-            // 通过 subscribeReVisible 进行订阅，并返回清除订阅事件的列表
+            // 通过 subscribeReVisible 进行订阅，并返回清除订阅事件的函数
             unsubscribeRef.current = subscribeReVisible(() => {
               fetchInstance.refresh();
             });
