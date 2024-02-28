@@ -1,53 +1,50 @@
 import { useState } from "react";
 import useMemoizedFn from "@/hooks/useMemoizedFn";
 
-const useMap = <K, V>(initialValue?: Iterable<readonly [K, V]>) => {
-  // 传入默认的 Map 参数
-  const getInitValue = () => new Map(initialValue as Map<K, V>);
+const useMap = <K, T>(initialValue?: Iterable<readonly [K, T]>) => {
+  // 初始值
+  const getInitValue = () => new Map(initialValue);
+  const [map, setMap] = useState<Map<K, T>>(getInitValue);
 
-  const [map, setMap] = useState<Map<K, V>>(getInitValue);
-
-  // 添加
-  const set = useMemoizedFn((key: K, value: V) => {
-    setMap((prevMap) => {
-      const temp = new Map(prevMap);
-      temp.set(key, value);
+  // 添加元素
+  const set = (key: K, entry: T) => {
+    setMap((prev) => {
+      const temp = new Map(prev);
+      temp.set(key, entry);
       return temp;
     });
-  });
+  };
 
   // 生成一个新的 Map 对象
-  const setAll = useMemoizedFn((newMap: Iterable<readonly [K, V]>) => {
+  const setAll = (newMap: Iterable<readonly [K, T]>) => {
     setMap(new Map(newMap));
-  });
+  };
 
-  // 获取
-  const get = useMemoizedFn((key: K) => map.get(key));
-
-  // 移除
-  const remove = useMemoizedFn((key: K) => {
-    setMap((prevMap) => {
-      const temp = new Map(prevMap);
+  // 移除元素
+  const remove = (key: K) => {
+    setMap((prev) => {
+      const temp = new Map(prev);
       temp.delete(key);
       return temp;
     });
-  });
+  };
 
-  // 重置
-  const reset = useMemoizedFn(() => {
-    setMap(getInitValue());
-  });
+  // 重置为默认值
+  const reset = () => setMap(getInitValue());
+
+  // 获取元素
+  const get = (key: K) => map.get(key);
 
   return [
     map,
     {
-      set,
-      setAll,
-      get,
-      remove,
-      reset,
+      set: useMemoizedFn(set),
+      setAll: useMemoizedFn(setAll),
+      remove: useMemoizedFn(remove),
+      reset: useMemoizedFn(reset),
+      get: useMemoizedFn(get),
     },
-  ];
+  ] as const;
 };
 
 export default useMap;
