@@ -1,4 +1,4 @@
-import {useState} from "react";
+import { useState } from "react";
 import useMemoizedFn from "@/hooks/useMemoizedFn";
 
 const useMap = <K, V>(initialValue?: Iterable<readonly [K, V]>) => {
@@ -9,11 +9,11 @@ const useMap = <K, V>(initialValue?: Iterable<readonly [K, V]>) => {
 
   // 添加
   const set = useMemoizedFn((key: K, value: V) => {
-    setMap(prevMap => {
+    setMap((prevMap) => {
       const temp = new Map(prevMap);
       temp.set(key, value);
       return temp;
-    })
+    });
   });
 
   // 生成一个新的 Map 对象
@@ -26,16 +26,16 @@ const useMap = <K, V>(initialValue?: Iterable<readonly [K, V]>) => {
 
   // 移除
   const remove = useMemoizedFn((key: K) => {
-    setMap(prevMap => {
+    setMap((prevMap) => {
       const temp = new Map(prevMap);
       temp.delete(key);
       return temp;
-    })
+    });
   });
 
   // 重置
   const reset = useMemoizedFn(() => {
-    setMap(getInitValue())
+    setMap(getInitValue());
   });
 
   return [
@@ -45,9 +45,9 @@ const useMap = <K, V>(initialValue?: Iterable<readonly [K, V]>) => {
       setAll,
       get,
       remove,
-      reset
-    }
+      reset,
+    },
   ];
-}
+};
 
 export default useMap;

@@ -1,6 +1,6 @@
-import Cookies from 'js-cookie';
-import { useState } from 'react';
-import useMemoizedFn from '../useMemoizedFn';
+import Cookies from "js-cookie";
+import { useState } from "react";
+import useMemoizedFn from "../useMemoizedFn";
 import { isFunction, isString } from "../../../utils";
 
 export type State = string | undefined;
@@ -16,7 +16,7 @@ function useCookieState(cookieKey: string, options: Options = {}) {
 
     if (isString(cookieValue)) return cookieValue;
 
-    // 定义 Cookie 默认值，但不同步到本地 Cookie
+    // options.defaultValue 存在并且为函数
     if (isFunction(options.defaultValue)) {
       return options.defaultValue();
     }
@@ -27,7 +27,7 @@ function useCookieState(cookieKey: string, options: Options = {}) {
   const updateState = useMemoizedFn(
     (
       newValue: State | ((prevState: State) => State),
-      newOptions: Cookies.CookieAttributes = {},
+      newOptions: Cookies.CookieAttributes = {}
     ) => {
       // setState 可以更新 cookie options，会与 useCookieState 设置的 options 进行 merge 操作
       const { defaultValue, ...restOptions } = { ...options, ...newOptions };
@@ -42,7 +42,7 @@ function useCookieState(cookieKey: string, options: Options = {}) {
       } else {
         Cookies.set(cookieKey, value, restOptions);
       }
-    },
+    }
   );
 
   return [state, updateState] as const;
