@@ -1,25 +1,28 @@
-import type {DependencyList, EffectCallback} from "react";
-import {DebounceOptions} from "../useDebounce/debounceOptions";
-import useUpdateEffect from "@/hooks/useUpdateEffect";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
+import type { DependencyList, EffectCallback } from "react";
+import type { DebounceOptions } from "../useDebounce/debounceOptions";
 import useDebounceFn from "@/hooks/useDebounceFn";
+import useUpdateEffect from "@/hooks/useUpdateEffect";
 
-
-const useDebounceEffect = (effect: EffectCallback, deps?: DependencyList, options?: DebounceOptions) => {
-  // 通过设置 flag 标识依赖，只有 flag 改变时，才会触发 useUpdateEffect 中的回调
+const useDebounceEffect = (
+  effect: EffectCallback,
+  deps?: DependencyList,
+  options?: DebounceOptions
+) => {
+  // 设置 flag 标识
   const [flag, setFlag] = useState({});
 
-  // 防抖函数
+  // 对 flag 标识设置防抖功能
   const { run } = useDebounceFn(() => {
     setFlag({});
   }, options);
 
-  // 监听 deps，中间包一层增加防抖功能
+  // 监听 deps，调用 run 函数更新 flag 标识
   useEffect(() => {
     return run();
   }, deps);
 
-  // flag 变化执行 effect
+  // 监听 flag 标识的变化，执行 effect 回调函数
   useUpdateEffect(effect, [flag]);
 };
 

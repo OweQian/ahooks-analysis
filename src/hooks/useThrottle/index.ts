@@ -1,6 +1,6 @@
-import type {ThrottleOptions} from './throttleOptions';
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import useThrottleFn from "@/hooks/useThrottleFn";
+import type { ThrottleOptions } from "./throttleOptions";
 
 const useThrottle = <T>(value: T, options?: ThrottleOptions) => {
   const [throttled, setThrottled] = useState(value);
@@ -10,12 +10,12 @@ const useThrottle = <T>(value: T, options?: ThrottleOptions) => {
     setThrottled(value);
   }, options);
 
-  // 监听 value 变化执行节流函数，更新 throttled 状态
+  // 监听 value 变化，执行节流函数，更新 throttled
   useEffect(() => {
     run();
   }, [value]);
 
   return throttled;
-}
+};
 
 export default useThrottle;
