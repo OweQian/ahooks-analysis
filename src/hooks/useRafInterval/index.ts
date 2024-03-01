@@ -1,9 +1,9 @@
+import { useCallback, useEffect, useRef } from "react";
 import useLatest from "@/hooks/useLatest";
-import {useCallback, useEffect, useRef} from "react";
-import {isNumber} from "../../../utils";
+import { isNumber } from "../../../utils";
 
 interface Handle {
-  id: number | NodeJS.Timer;
+  id: number | ReturnType<typeof setInterval>;
 }
 
 const setRafInterval = (callback: () => void, delay: number = 0): Handle => {
@@ -13,30 +13,34 @@ const setRafInterval = (callback: () => void, delay: number = 0): Handle => {
       id: setInterval(callback, delay),
     };
   }
-  // 开始时间
-  let start = new Date().getTime();
+  // 初始化开始时间
+  let start = Date.now();
+  // 初始化 handle
   const handle: Handle = {
     id: 0,
   };
   // 定义动画函数
   const loop = () => {
-    const current = new Date().getTime();
-    // 当前时间 - 开始时间，大于等于 delay，则执行 callback 并重置开始时间
+    const current = Date.now();
+    // 当前时间 - 开始时间 >= delay，则执行 callback 并重置开始时间
     if (current - start >= delay) {
       callback();
-      start = new Date().getTime();
+      start = Date.now();
     }
-    // 递归调用 requestAnimationFrame，请求下一帧
+    // 重置 handle，递归调用 requestAnimationFrame，请求下一帧（：此处请注意与 useRafTimeout 的区别
     handle.id = requestAnimationFrame(loop);
   };
   // 启动动画
   handle.id = requestAnimationFrame(loop);
+  // 返回 handle
   return handle;
 };
 
-const cancelAnimationFrameIsNotDefined = (t: any): t is NodeJS.Timer => {
+const cancelAnimationFrameIsNotDefined = (
+  t: any
+): t is ReturnType<typeof setInterval> => {
   return typeof cancelAnimationFrame === typeof undefined;
-}
+};
 
 const clearRafInterval = (handle: Handle) => {
   // 不支持 cancelAnimationFrame API，则通过 clearInterval 清除
@@ -52,7 +56,7 @@ const useRafInterval = (
   delay: number | undefined,
   options?: {
     immediate?: boolean;
-  },
+  }
 ) => {
   const immediate = options?.immediate;
 
@@ -66,9 +70,11 @@ const useRafInterval = (
   }, []);
 
   useEffect(() => {
-    // 当设置值为 undefined 时会停止计时器
-    if (!isNumber(delay) || delay < 0) return;
-    // 立即执行
+    // delay 不是数字或 delay 的值小于 0，直接返回，停止定时器
+    if (!isNumber(delay) || delay < 0) {
+      return;
+    }
+    // 立即执行一次回调函数
     if (immediate) {
       fnRef.current();
     }
@@ -76,8 +82,7 @@ const useRafInterval = (
     timerRef.current = setRafInterval(() => {
       fnRef.current();
     }, delay);
-    // 变更依赖项时，清除旧的定时器
-    // 通过 useEffect 的返回清除机制，开发者不需要关注清除定时器的逻辑，避免内存泄露
+    // 通过 useEffect 的返回清除机制，清除定时器，避免内存泄露
     return () => {
       if (timerRef.current) {
         clearRafInterval(timerRef.current);
@@ -86,6 +91,6 @@ const useRafInterval = (
   }, [delay]);
 
   return clear;
-}
+};
 
 export default useRafInterval;

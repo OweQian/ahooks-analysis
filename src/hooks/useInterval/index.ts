@@ -1,10 +1,14 @@
-import {isNumber} from "../../../utils";
+import { useCallback, useEffect, useRef } from "react";
 import useMemoizedFn from "@/hooks/useMemoizedFn";
-import {useCallback, useEffect, useRef} from "react";
+import { isNumber } from "../../../utils";
 
-const useInterval = (fn: () => void, delay?: number, options: {immediate?: boolean} = {}) => {
+const useInterval = (
+  fn: () => void,
+  delay?: number,
+  options: { immediate?: boolean } = {}
+) => {
   const timerCallback = useMemoizedFn(fn);
-  const timerRef = useRef<NodeJS.Timer | null>(null);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // 暴露清除定时器的方法
   const clear = useCallback(() => {
@@ -14,18 +18,17 @@ const useInterval = (fn: () => void, delay?: number, options: {immediate?: boole
   }, []);
 
   useEffect(() => {
-    // 当设置值为 undefined 时会停止计时器
+    // delay 不是数字或 delay 的值小于 0，直接返回，停止定时器
     if (!isNumber(delay) || delay < 0) {
       return;
     }
-    // 立即执行
+    // 立即执行一次回调函数
     if (options.immediate) {
       timerCallback();
     }
     // 开启新的定时器
     timerRef.current = setInterval(timerCallback, delay);
-    // 变更依赖项时，清除旧的定时器
-    // 通过 useEffect 的返回清除机制，开发者不需要关注清除定时器的逻辑，避免内存泄露
+    // 通过 useEffect 的返回清除机制，清除定时器，避免内存泄露
     return clear;
   }, [delay, options.immediate]);
 
@@ -33,4 +36,3 @@ const useInterval = (fn: () => void, delay?: number, options: {immediate?: boole
 };
 
 export default useInterval;
-
