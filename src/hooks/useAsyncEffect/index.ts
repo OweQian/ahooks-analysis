@@ -1,5 +1,6 @@
-import {DependencyList, useEffect} from "react";
-import {isFunction} from "../../../utils";
+import type { DependencyList } from "react";
+import { useEffect } from "react";
+import { isFunction } from "../../../utils";
 
 // 判断是否是 AsyncGenerator
 function isAsyncGenerator(
@@ -10,7 +11,10 @@ function isAsyncGenerator(
   return isFunction(val[Symbol.asyncIterator]);
 }
 
-const useAsyncEffect = (effect: () => AsyncGenerator<void, void, void> | Promise<void>, deps?: DependencyList) => {
+const useAsyncEffect = (
+  effect: () => AsyncGenerator<void, void, void> | Promise<void>,
+  deps?: DependencyList
+) => {
   useEffect(() => {
     const e = effect();
     let cancelled = false;
@@ -20,7 +24,7 @@ const useAsyncEffect = (effect: () => AsyncGenerator<void, void, void> | Promise
         while (true) {
           // 如果是 Generator 异步函数，则通过 next() 的方式执行
           const result = await e.next();
-          // Generator function 全部执行完成，或者当前的 effect 被清理，则停止继续往下执行
+          // Generator function 全部执行完成，或者当前的 effect 已经被清理，则停止继续往下执行
           if (result.done || cancelled) {
             break;
           }
@@ -34,9 +38,8 @@ const useAsyncEffect = (effect: () => AsyncGenerator<void, void, void> | Promise
     return () => {
       // 当前 effect 已被清理
       cancelled = true;
-    }
+    };
   }, deps);
-}
+};
 
 export default useAsyncEffect;
-
