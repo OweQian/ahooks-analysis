@@ -1,4 +1,4 @@
-import { DependencyList } from "react";
+import type { DependencyList } from "react";
 
 // 判断依赖项数组是否相同
 function depsAreSame(oldDeps: DependencyList, deps: DependencyList): boolean {
@@ -10,4 +10,3 @@ function depsAreSame(oldDeps: DependencyList, deps: DependencyList): boolean {
 }
 
 export default depsAreSame;
-
