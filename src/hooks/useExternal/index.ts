@@ -1,27 +1,40 @@
-import {useEffect, useRef, useState} from "react";
+import { useEffect, useRef, useState } from "react";
 
 type JsOptions = {
-  type: 'js',
-  js?: Partial<HTMLScriptElement>,
-  keepWhenUnused?: boolean,
+  // 需引入外部资源的类型
+  type: "js";
+  // script 标签支持的属性
+  js?: Partial<HTMLScriptElement>;
+  // 在不持有资源的引用后，仍然保留资源
+  keepWhenUnused?: boolean;
 };
 
 type CssOptions = {
-  type: 'css',
-  css?: Partial<HTMLStyleElement>,
+  // 需引入外部资源的类型
+  type: "css";
+  // link 标签支持的属性
+  css?: Partial<HTMLStyleElement>;
+  // 在不持有资源的引用后，仍然保留资源
   keepWhenUnused?: boolean;
 };
 
 type DefaultOptions = {
-  type?: never,
-  js?: Partial<HTMLScriptElement>,
-  css?: Partial<HTMLStyleElement>,
+  type?: never;
+  js?: Partial<HTMLScriptElement>;
+  css?: Partial<HTMLStyleElement>;
   keepWhenUnused?: boolean;
 };
 
 export type Options = JsOptions | CssOptions | DefaultOptions;
 
-export type Status = 'unset' | 'loading' | 'ready' | 'error';
+/**
+ * 加载状态
+ * unset - 未设置
+ * loading - 加载中
+ * ready - 加载完成
+ * error - 加载失败
+ */
+export type Status = "unset" | "loading" | "ready" | "error";
 
 interface loadResult {
   ref: Element;
@@ -33,50 +46,50 @@ interface loadResult {
 const EXTERNAL_USED_COUNT: Record<string, number> = {};
 
 const loadingScript = (path: string, props = {}): loadResult => {
-  // 判断是否已经有 JS 资源
+  // 判断是否已经有该 JS 资源
   const script = document.querySelector(`script[src="${path}"]`);
 
   // 没有，则创建
   if (!script) {
-    const newScript = document.createElement('script');
+    const newScript = document.createElement("script");
     newScript.src = path;
 
     // 设置属性
-    Object.keys(props).forEach(key => {
+    Object.keys(props).forEach((key) => {
       newScript[key] = props[key];
     });
 
     // 更新状态
-    newScript.setAttribute('data-status', 'loading');
-    // 在 body 标签中插入
+    newScript.setAttribute("data-status", "loading");
+    // 在 body 中插入
     document.body.appendChild(newScript);
 
     return {
       ref: newScript,
-      status: 'loading',
+      status: "loading",
     };
   }
 
   // 有则直接返回，并取 data-status 中的值
   return {
     ref: script,
-    status: (script.getAttribute('data-status') as Status) || 'ready',
-  }
+    status: (script.getAttribute("data-status") as Status) || "ready",
+  };
 };
 
 const loadCss = (path: string, props = {}): loadResult => {
-  // 判断是否已经有 CSS 资源
+  // 判断是否已经有该 CSS 资源
   const css = document.querySelector(`link[href="${path}"]`);
 
   // 没有，则创建
   if (!css) {
-    const newCss = document.createElement('link');
+    const newCss = document.createElement("link");
 
-    newCss.rel = 'stylesheet';
+    newCss.rel = "stylesheet";
     newCss.href = path;
 
     // 设置属性
-    Object.keys(props).forEach(key => {
+    Object.keys(props).forEach((key) => {
       newCss[key] = props[key];
     });
 
@@ -87,59 +100,66 @@ const loadCss = (path: string, props = {}): loadResult => {
      * 将 newCss 元素的 as 属性设置为 'style'，告诉浏览器这是一个样式表资源
      * */
     // IE9+
-    const isLegacyIECss = 'hideFocus' in newCss;
+    const isLegacyIECss = "hideFocus" in newCss;
     // use preload in IE Edge (to detect load errors)
     if (isLegacyIECss && newCss.relList) {
-      newCss.rel = 'preload';
-      newCss.as = 'style';
+      newCss.rel = "preload";
+      newCss.as = "style";
     }
 
     // 更新状态
-    newCss.setAttribute('data-status', 'loading');
+    newCss.setAttribute("data-status", "loading");
     // 在 head 标签中插入
     document.head.appendChild(newCss);
 
     return {
-      ref: css,
-      status: 'loading',
-    }
+      ref: newCss,
+      status: "loading",
+    };
   }
 
   // 有则直接返回，并取 data-status 中的值
   return {
     ref: css,
-    status: (css.getAttribute('data-status') as Status) || 'ready',
-  }
+    status: (css.getAttribute("data-status") as Status) || "ready",
+  };
 };
 
 const useExternal = (path?: string, options?: Options) => {
-  const [status, setStatus] = useState<Status>(path ? 'loading' : 'unset');
+  const [status, setStatus] = useState<Status>(path ? "loading" : "unset");
 
+  // DOM
   const ref = useRef<Element>();
 
   useEffect(() => {
     if (!path) {
-      setStatus('unset');
+      setStatus("unset");
       return;
     }
 
     // 处理路径
-    const pathname = path.replace(/[|#].*$/, '');
+    const pathname = path.replace(/[|#].*$/, "");
 
     // 判断是 CSS 类型
-    if (options?.type === 'css' || (!options?.type && /(^css!|\.css$)/.test(pathname))) {
+    if (
+      options?.type === "css" ||
+      (!options?.type && /(^css!|\.css$)/.test(pathname))
+    ) {
       const result = loadCss(path, options?.css);
       ref.current = result.ref;
       setStatus(result.status);
       // 判断是 JS 类型
-    } else if (options?.type === 'js' || (!options?.type && /(^js!|\.js$)/.test(pathname))) {
+    } else if (
+      options?.type === "js" ||
+      (!options?.type && /(^js!|\.js$)/.test(pathname))
+    ) {
       const result = loadingScript(path, options?.js);
       ref.current = result.ref;
       setStatus(result.status);
     } else {
       console.error(
         "Cannot infer the type of external resource, and please provide a type ('js' | 'css'). " +
-        'Refer to the https://ahooks.js.org/hooks/dom/use-external/#options',
+          "Refer to the https://ahooks.js.org/hooks/dom/use-external/#options"
       );
     }
 
@@ -154,30 +174,32 @@ const useExternal = (path?: string, options?: Options) => {
       EXTERNAL_USED_COUNT[path] += 1;
     }
 
+    // // 判断和设置加载状态
     const handler = (event: Event) => {
-      // 判断和设置加载状态
-      const targetStatus = event.type === 'load' ? 'ready' : 'error';
-      ref.current?.setAttribute('data-status', targetStatus);
+      const targetStatus = event.type === "load" ? "ready" : "error";
+      ref.current?.setAttribute("data-status", targetStatus);
       setStatus(targetStatus);
     };
 
-    // / 监听文件加载情况
-    ref.current.addEventListener('load', handler);
-    ref.current.addEventListener('error', handler);
+    // 注册事件监听器
+    // 加载完成
+    ref.current.addEventListener("load", handler);
+    // 加载失败
+    ref.current.addEventListener("error", handler);
     return () => {
-      // 清除副作用
-      ref.current?.removeEventListener('load', handler);
-      ref.current?.removeEventListener('error', handler);
+      // 清除事件监听器
+      ref.current?.removeEventListener("load", handler);
+      ref.current?.removeEventListener("error", handler);
 
       EXTERNAL_USED_COUNT[path] -= 1;
 
-      // 在不持有资源的引用后，从 DOM 中移除 element
+      // 在不持有资源的引用后，从 DOM 中移除
       if (EXTERNAL_USED_COUNT[path] === 0 && !options?.keepWhenUnused) {
         ref.current?.remove();
       }
 
       ref.current = undefined;
-    }
+    };
   }, [path]);
 
   return status;
