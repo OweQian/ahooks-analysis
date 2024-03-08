@@ -1,12 +1,17 @@
-import {DependencyList, EffectCallback, useRef} from "react";
-import {BasicTarget} from "./domTarget";
-import {depsEqual} from "./depsEqual";
+import type { DependencyList, EffectCallback } from "react";
+import { useRef } from "react";
+import type { BasicTarget } from "./domTarget";
 import useEffectWithTarget from "./useEffectWithTarget";
+import { depsEqual } from "./depsEqual";
 
 /**
- * 深度比较（对象值只比较属性）
+ * 深度比较
  * */
-const useDeepCompareEffectWithTarget = (effect: EffectCallback, deps: DependencyList, target: BasicTarget<any> | BasicTarget<any>[]) => {
+const useDeepCompareEffectWithTarget = (
+  effect: EffectCallback,
+  deps: DependencyList,
+  target: BasicTarget<any> | BasicTarget<any>[]
+) => {
   const ref = useRef<DependencyList>();
   const signalRef = useRef<number>(0);
 

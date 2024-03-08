@@ -1,6 +1,6 @@
-import {BasicTarget} from "../../../utils/domTarget";
 import useBoolean from "@/hooks/useBoolean";
 import useEventListener from "@/hooks/useEventListener";
+import type { BasicTarget } from "../../../utils/domTarget";
 
 export interface Options {
   onEnter?: () => void;
@@ -11,11 +11,11 @@ export interface Options {
 const useHover = (target: BasicTarget, options?: Options): boolean => {
   const { onEnter, onLeave, onChange } = options || {};
 
-  const [state, {setTrue, setFalse}] = useBoolean(false);
+  const [state, { setTrue, setFalse }] = useBoolean(false);
 
-  // 监听 mouseenter 触发 onEnter 事件，切换状态为 true
+  // 监听 mouseenter 事件
   useEventListener(
-    'mouseenter',
+    "mouseenter",
     () => {
       onEnter?.();
       setTrue();
@@ -26,9 +26,9 @@ const useHover = (target: BasicTarget, options?: Options): boolean => {
     }
   );
 
-  // 监听 mouseleave 触发 onLeave 事件，切换状态为 false
+  // 监听 mouseleave 事件
   useEventListener(
-    'mouseleave',
+    "mouseleave",
     () => {
       onLeave?.();
       setFalse();
