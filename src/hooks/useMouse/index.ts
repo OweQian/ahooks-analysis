@@ -1,20 +1,23 @@
-import {BasicTarget, getTargetElement} from "../../../utils/domTarget";
 import useRafState from "@/hooks/useRafState";
 import useEventListener from "@/hooks/useEventListener";
+import type { BasicTarget } from "../../../utils/domTarget";
+import { getTargetElement } from "../../../utils/domTarget";
 
 /**
- * screenX: 距离显示器左侧的距离（电脑屏幕）
- * screenY: 距离显示器顶部的距离（电脑屏幕）
- * clientX: 距离当前视窗左侧的距离（浏览器窗口）
- * clientY: 距离当前视窗顶部的距离（浏览器窗口）
- * pageX: 距离完整页面左侧的距离（clientX + 横向滚动条距离）
- * pageY: 距离完整页面顶部的距离（clientY + 横向滚动条距离）
+ * screenX: 距离显示器左侧的距离（屏幕）
+ * screenY: 距离显示器顶部的距离（屏幕）
+ * clientX: 距离当前视窗左侧的距离（视窗）
+ * clientY: 距离当前视窗顶部的距离（视窗）
+ * pageX: 距离完整页面左侧的距离（clientX + 文档在水平方向上已经滚动的像素数）
+ * pageY: 距离完整页面顶部的距离（clientY + 文档在垂直方向上已经滚动的像素数）
+ * elementX: 距离指定元素左侧的距离
+ * elementY: 距离指定元素顶部的距离
  * elementH: 指定元素的高
  * elementW: 指定元素的宽
  * elementPosX: 指定元素距离完整页面左侧的距离（：left + window.pageXOffset)
- * elementPosY: 指定元素距离完整页面顶部的距离（：left + window.pageYOffset)
- * elementX: 距离指定元素左侧的距离
- * elementY: 距离指定元素顶部的距离
+ * elementPosY: 指定元素距离完整页面顶部的距离（：top + window.pageYOffset)
+ * window.pageXOffset: 表示文档在水平方向上已经滚动的像素数
+ * window.pageYOffset: 表示文档在垂直方向上已经滚动的像素数
  * */
 
 export interface CursorState {
@@ -45,14 +48,14 @@ const initState: CursorState = {
   elementW: NaN,
   elementPosX: NaN,
   elementPosY: NaN,
-}
+};
 
 const useMouse = (target?: BasicTarget) => {
   const [state, setState] = useRafState(initState);
 
   // 监听 mousemove
   useEventListener(
-    'mousemove',
+    "mousemove",
     (event: MouseEvent) => {
       const { screenX, screenY, clientX, clientY, pageX, pageY } = event;
       const newState = {
@@ -72,8 +75,9 @@ const useMouse = (target?: BasicTarget) => {
 
       const targetElement = getTargetElement(target);
       if (targetElement) {
-        // 目标元素的大小及其相对于当前视窗的位置
-        const { left, top, width, height } = targetElement.getBoundingClientRect();
+        // 获取目标元素的位置信息
+        const { left, top, width, height } =
+          targetElement.getBoundingClientRect();
         // 计算鼠标相对于目标元素的位置信息
         newState.elementPosX = left + window.pageXOffset;
         newState.elementPosY = top + window.pageYOffset;
@@ -87,7 +91,7 @@ const useMouse = (target?: BasicTarget) => {
     {
       target: () => document,
     }
-  )
+  );
 
   return state;
 };
