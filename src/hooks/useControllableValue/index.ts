@@ -1,9 +1,8 @@
-import { useMemo, useRef } from 'react';
-import type { SetStateAction } from 'react';
-
-import useMemoizedFn from '../useMemoizedFn';
-import useUpdate from '../useUpdate';
-import {isFunction} from "../../../utils";
+import { useMemo, useRef } from "react";
+import type { SetStateAction } from "react";
+import { isFunction } from "../../../utils";
+import useMemoizedFn from "../useMemoizedFn";
+import useUpdate from "../useUpdate";
 
 export interface Options<T> {
   defaultValue?: T;
@@ -21,33 +20,38 @@ export interface StandardProps<T> {
 }
 
 function useControllableValue<T = any>(
-  props: StandardProps<T>,
+  props: StandardProps<T>
 ): [T, (v: SetStateAction<T>) => void];
 function useControllableValue<T = any>(
   props?: Props,
-  options?: Options<T>,
+  options?: Options<T>
 ): [T, (v: SetStateAction<T>, ...args: any[]) => void];
-function useControllableValue<T = any>(props: Props = {}, options: Options<T> = {}) {
+function useControllableValue<T = any>(
+  props: Props = {},
+  options: Options<T> = {}
+) {
   const {
     defaultValue,
-    defaultValuePropName = 'defaultValue',
-    valuePropName = 'value',
-    trigger = 'onChange',
+    defaultValuePropName = "defaultValue",
+    valuePropName = "value",
+    trigger = "onChange",
   } = options;
 
   const value = props[valuePropName] as T;
-  // 如果 props 中有 value 属性，则是受控组件
+  // 如果 props 中存在值的属性名，则为受控组件
   const isControlled = props.hasOwnProperty(valuePropName);
 
   // 初始值
   const initialValue = useMemo(() => {
+    // 受控组件
     if (isControlled) {
       return value;
     }
-    // 处理默认值
+    // props defaultValue
     if (props.hasOwnProperty(defaultValuePropName)) {
       return props[defaultValuePropName];
     }
+    // options defaultValue
     return defaultValue;
   }, []);
 
@@ -63,7 +67,7 @@ function useControllableValue<T = any>(props: Props = {}, options: Options<T> = 
   function setState(v: SetStateAction<T>, ...args: any[]) {
     const r = isFunction(v) ? v(stateRef.current) : v;
 
-    // 如果是非受控组件，则手动更新状态，并强制更新
+    // 如果是非受控组件，则手动更新状态，强制组件重新渲染
     if (!isControlled) {
       stateRef.current = r;
       update();

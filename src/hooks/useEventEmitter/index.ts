@@ -1,9 +1,9 @@
-import {useEffect, useRef} from "react";
+import { useEffect, useRef } from "react";
 
 type Subscription<T> = (val: T) => void;
 
 export class EventEmitter<T> {
-  // 存放事件列表
+  // 订阅器列表
   private subscriptions = new Set<Subscription<T>>();
 
   // 推送事件

@@ -1,14 +1,17 @@
-import useUpdate from "@/hooks/useUpdate";
-import {useRef} from "react";
+import { useRef } from "react";
+import { isPlainObject } from "lodash-es";
 import useCreation from "@/hooks/useCreation";
-import {isPlainObject} from "lodash-es";
+import useUpdate from "@/hooks/useUpdate";
 
 // k:v 原对象:代理过的对象
 const proxyMap = new WeakMap();
 // k:v 代理过的对象:原对象
 const rawMap = new WeakMap();
 
-function observer<T extends Record<string, any>>(initialVal: T, cb: () => void): T {
+function observer<T extends Record<string, any>>(
+  initialVal: T,
+  cb: () => void
+): T {
   const existingProxy = proxyMap.get(initialVal);
 
   // 添加缓存 防止重新构建proxy
