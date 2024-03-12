@@ -1,10 +1,9 @@
-import {DependencyList, useRef} from "react";
+import type { DependencyList } from "react";
+import { useRef } from "react";
 import depsAreSame from "../../../utils/depsAreSame";
 
-const useCreation = <T>(factory: () => T, deps: DependencyList): T => {
-  const {
-    current
-  } = useRef({
+const useCreation = <T>(factory: () => T, deps: DependencyList) => {
+  const { current } = useRef({
     deps,
     obj: undefined as undefined | T,
     initialized: false, // 初始化标志
@@ -21,6 +20,6 @@ const useCreation = <T>(factory: () => T, deps: DependencyList): T => {
   }
 
   return current.obj as T;
-}
+};
 
 export default useCreation;
