@@ -1,24 +1,28 @@
-import type {Data, PaginationOptions, PaginationResult, Params, Service} from './type';
-import useRequest from "@/hooks/useRequest";
-import {useMemo} from "react";
+import { useMemo } from "react";
 import useMemoizedFn from "@/hooks/useMemoizedFn";
+import useRequest from "@/hooks/useRequest";
+
+import type {
+  Data,
+  PaginationOptions,
+  PaginationResult,
+  Params,
+  Service,
+} from "./types";
 
 /**
  * 基于 useRequest，封装了常见的分页逻辑
  * */
 const usePagination = <TData extends Data, TParams extends Params>(
   service: Service<TData, TParams>,
-  options: PaginationOptions<TData, TParams>,
+  options: PaginationOptions<TData, TParams> = {}
 ) => {
   const { defaultPageSize = 10, defaultCurrent = 1, ...rest } = options;
 
   // // service 约定返回的数据结构为 { total: number, list: Item[] }
   const result = useRequest(service, {
     // service 的默认参数为 { current: number, pageSize: number }
-    defaultParams: [{
-      current: defaultCurrent,
-      pageSize: defaultPageSize,
-    }],
+    defaultParams: [{ current: defaultCurrent, pageSize: defaultPageSize }],
     // refreshDeps 变化，会重置 current 到第一页，并重新发起请求
     refreshDepsAction: () => {
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
@@ -32,7 +36,10 @@ const usePagination = <TData extends Data, TParams extends Params>(
   // 计算总条数
   const total = result.data?.total || 0;
   // 计算总页数
-  const totalPage = useMemo(() => Math.ceil(total / pageSize), [pageSize, total]);
+  const totalPage = useMemo(
+    () => Math.ceil(total / pageSize),
+    [pageSize, total]
+  );
 
   /**
    * c: current
@@ -51,11 +58,14 @@ const usePagination = <TData extends Data, TParams extends Params>(
     const [oldPaginationParams = {}, ...restParams] = result.params || [];
 
     // 重新执行请求
-    result.run({
-      ...oldPaginationParams,
-      current: toCurrent,
-      pageSize: toPageSize,
-    }, ...restParams);
+    result.run(
+      {
+        ...oldPaginationParams,
+        current: toCurrent,
+        pageSize: toPageSize,
+      },
+      ...restParams
+    );
   };
 
   const changeCurrent = (c: number) => {
