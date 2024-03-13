@@ -1,9 +1,10 @@
-import {DependencyList, useEffect, useRef} from "react";
+import type { DependencyList } from "react";
+import { useEffect, useRef } from "react";
 
 type Effect<T extends DependencyList> = (
   changes?: number[],
   previousDeps?: T,
-  currentDeps?: T,
+  currentDeps?: T
 ) => void | (() => void);
 
 const diffTwoDeps = (deps1?: DependencyList, deps2?: DependencyList) => {
@@ -12,21 +13,26 @@ const diffTwoDeps = (deps1?: DependencyList, deps2?: DependencyList) => {
   // As this func is used only in this hook, we assume 2 deps always have same length.
   return deps1
     ? deps1
-        .map((_ele, idx) => !Object.is(deps1[idx], deps2?.[idx]) ? idx : -1)
-        .filter(ele => ele >= 0)
+        .map((_ele, idx) => (!Object.is(deps1[idx], deps2?.[idx]) ? idx : -1))
+        .filter((ele) => ele >= 0)
     : deps2
-      ? deps2.map((_ele, idx) => idx)
-      : [];
-}
+    ? deps2.map((_ele, idx) => idx)
+    : [];
+};
 
-const useTrackedEffect = <T extends DependencyList>(effect: Effect<T>, deps?: [...T]) => {
+const useTrackedEffect = <T extends DependencyList>(
+  effect: Effect<T>,
+  deps?: [...T]
+) => {
+  // 保存上一次的依赖
   const previousDepsRef = useRef<T>();
 
   useEffect(() => {
+    // 变化的依赖 index 数组
     const changes = diffTwoDeps(previousDepsRef.current, deps);
-    // 上次的依赖项对应的值的数组
+    // 上一次的依赖
     const previousDeps = previousDepsRef.current;
-    // 更新依赖项对应的值的数组
+    // 当前依赖
     previousDepsRef.current = deps;
     return effect(changes, previousDeps, deps);
   }, deps);
