@@ -307,3 +307,5 @@ const useAntdTable = <TData extends Data, TParams extends Params>(
     },
   } as AntdTableResult<TData, TParams>;
 };
+
+export default useAntdTable;
