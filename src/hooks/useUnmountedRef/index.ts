@@ -1,7 +1,7 @@
-import { MutableRefObject, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 
-const useUnmountedRef = (): MutableRefObject<boolean> => {
-  const unmountedRef = useRef<boolean>(false);
+const useUnmountedRef = () => {
+  const unmountedRef = useRef(false);
 
   useEffect(() => {
     // 组件挂载，unmountedRef.current 置为 false
